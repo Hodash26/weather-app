@@ -153,6 +153,7 @@ export default {
         text-align:center;
         color: black;
         border: 2px dashed black;
+        border-radius: 15px;
         font-size: 19px;
         width: 40%;
         margin: 15px;
