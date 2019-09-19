@@ -5,7 +5,7 @@
         </h2>
         <div class="wrap">
             <div class="infos" v-if="infos">
-                <p>Maintenant</p>
+                <p class="day">Maintenant</p>
                 <p class="city">
                     {{infos.city.name}}
                 </p>
@@ -24,12 +24,12 @@
             </div>
     
             <div class="infos" v-if="infos">
-                <p>Demain</p>
+                <p class="day">Demain</p>
                 <p class="city">
                     {{infos.city.name}}
                 </p>
                 <p class="cloud">
-                    <img  v-bind:src="changeimage0" alt="image du temps">
+                    <img  v-bind:src="changeimage1" alt="image du temps">
                 </p>
                 <p class="temp">
                     Temperature : {{ infos.list[7].main.temp}}°
@@ -43,7 +43,7 @@
             </div>
     
             <div class="infos" v-if="infos">
-                <p>Après-demain</p>
+                <p class="day">Après-demain</p>
                 <p class="city">
                     {{infos.city.name}}
                 </p>
@@ -63,12 +63,12 @@
     
     
             <div class="infos" v-if="infos">
-                <p>Dans 3 jours</p>
+                <p class="day">Dans 3 jours</p>
                 <p class="city">
                     {{infos.city.name}}
                 </p>
                 <p class="cloud">
-                    <img  v-bind:src="changeimage2" alt="image du temps">
+                    <img  v-bind:src="changeimage3" alt="image du temps">
                 </p>
                 <p class="temp">
                     Temperature : {{ infos.list[23].main.temp}}°
@@ -86,6 +86,7 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 
 
 export default {
@@ -94,7 +95,12 @@ export default {
     {
         return {
             infos: null,
-            date: new Date()
+            date: null
+        }
+    },
+    methods: {
+        updateDate() {
+            this.date = moment()
         }
     },
     computed: {
@@ -112,6 +118,8 @@ export default {
         }
     },
     created() {
+        this.date = moment();
+        setInterval(() => {this.updateDate()},1000)
         axios
             .get("https://api.openweathermap.org/data/2.5/forecast?q=Essars&units=metric&APPID=8ce918844b53476fc2c0fae219e82d75")
             .then(response => (this.infos = response.data))
@@ -135,10 +143,16 @@ export default {
         font-size: 24px;
     }
 
+    .day {
+        font-size: 25px;
+        font-weight: bold;
+        font-family:sans-serif
+    }
+
     .infos {
         text-align:center;
         color: black;
-        border: 2px solid black;
+        border: 2px dashed black;
         font-size: 19px;
         width: 40%;
         margin: 15px;
@@ -151,8 +165,13 @@ export default {
         width: 100%;
     }
 
+    .cloud {
+        margin:0;
+    }
+
     img {
         height: 150px;
         width: 150px;
+        background-color: black; 
     }
 </style>
